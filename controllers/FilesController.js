@@ -151,16 +151,12 @@ const getFile = async (req, res) => {
   const token = req.headers['x-token'];
   const userId = await redisClient.get(`auth_${token}`);
   /* eslint-disable-next-line */
-  if (file.isPublic === false && (!userId || file.userId != userId)) {
+  if (file.isPublic === false && (!userId || file.userId.toString() !== userId)) {
     return res.status(404).json({ error: 'Not found' });
   }
   if (file.type === 'folder') return res.status(400).json({ error: 'A folder doesn\'t have content' });
   if (fs.existsSync(file.localPath)) {
     const mimeType = mime.lookup(file.name);
-    if (mimeType === false) {
-      return res.status(404).json({ error: 'Not found' });
-    }
-    console.log(mimeType);
     res.set('Content-Type', mimeType);
     const data = fs.readFileSync(file.localPath);
     return res.end(data);
