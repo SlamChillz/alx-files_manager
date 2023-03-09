@@ -11,7 +11,7 @@ module.exports = (data) => {
     refined.type = row.type;
     refined.isPublic = row.isPublic;
     if (row.parentId === '0') {
-      refined.parentId = 0;
+      refined.parentId = '0';
     } else {
       refined.parentId = row.parentId.valueOf();
     }
