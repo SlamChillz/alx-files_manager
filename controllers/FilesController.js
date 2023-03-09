@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 /**
  * Defines handlers for files routes
  */

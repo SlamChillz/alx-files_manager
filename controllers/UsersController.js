@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 /**
  * Defines handler for users route
  */

@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 /**
  * MongoDB client connection class
  */

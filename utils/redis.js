@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Redis _client utility class
  */

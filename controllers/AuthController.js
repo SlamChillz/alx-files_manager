@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 /**
  * Authenticate a user
  */

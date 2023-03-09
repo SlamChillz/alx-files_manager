@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 /**
  * Transforms data from database into presentable outputs
  */
