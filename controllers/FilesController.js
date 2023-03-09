@@ -49,8 +49,7 @@ const postUpload = async (req, res) => {
     fileContent = Buffer.from(data, 'base64').toString('utf8');
   }
   try {
-    const err = fs.mkdirSync(`${rootFolder}`, { recursive: true });
-    if (err) throw err;
+    fs.mkdirSync(`${rootFolder}`, { recursive: true });
     const localPath = (rootFolder[-1] === '/') ? `${rootFolder}${fileName}` : `${rootFolder}/${fileName}`;
     fs.writeFileSync(localPath, fileContent);
     const result = await dbClient.insertOne('files', {
