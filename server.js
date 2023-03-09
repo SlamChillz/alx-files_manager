@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 /**
  * Application entry point
  */

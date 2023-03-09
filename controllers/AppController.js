@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 /**
  * Redis and Datbase status check and collections count
  */

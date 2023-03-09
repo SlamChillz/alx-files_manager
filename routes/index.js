@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 /**
  * Assign handlers to routes
  */
