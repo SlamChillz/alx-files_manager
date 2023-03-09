@@ -17,3 +17,5 @@ app.use(router);
 app.listen(PORT, () => {
   console.log(`Express server is live on port ${PORT}`);
 });
+
+module.exports = app;
