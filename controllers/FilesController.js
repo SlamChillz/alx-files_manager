@@ -3,10 +3,9 @@
 /**
  * Defines handlers for files routes
  */
+import fs from 'fs';
 import { ObjectId } from 'mongodb';
 import { v4 as uuid4 } from 'uuid';
-import { mkdir, writeFile } from 'fs/promises';
-import { existsSync, readFileSync } from 'fs';
 import mime from 'mime-types';
 import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
@@ -52,9 +51,10 @@ const postUpload = async (req, res) => {
     fileContent = Buffer.from(data, 'base64').toString('utf8');
   }
   try {
-    await mkdir(`${rootFolder}`, { recursive: true });
+    const err = fs.mkdirSync(`${rootFolder}`, { recursive: true });
+    if (err) throw err;
     const localPath = (rootFolder[-1] === '/') ? `${rootFolder}${fileName}` : `${rootFolder}/${fileName}`;
-    await writeFile(localPath, fileContent);
+    fs.writeFileSync(localPath, fileContent);
     const result = await dbClient.insertOne('files', {
       userId: ObjectId(userId),
       name,
@@ -158,14 +158,14 @@ const getFile = async (req, res) => {
     return res.status(404).json({ error: 'Not found' });
   }
   if (file.type === 'folder') return res.status(400).json({ error: 'A folder doesn\'t have content' });
-  if (existsSync(file.localPath)) {
+  if (fs.existsSync(file.localPath)) {
     const mimeType = mime.lookup(file.name);
     if (mimeType === false) {
       return res.status(404).json({ error: 'Not found' });
     }
     console.log(mimeType);
     res.set('Content-Type', mimeType);
-    const data = readFileSync(file.localPath);
+    const data = fs.readFileSync(file.localPath);
     return res.end(data);
   }
   return res.status(404).json({ error: 'Not found' });
