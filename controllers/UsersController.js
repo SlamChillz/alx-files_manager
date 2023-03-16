@@ -1,6 +1,7 @@
 /**
  * Defines handler for users route
  */
+import Queue from 'bull';
 import { ObjectId } from 'mongodb';
 import hash from '../utils/hash';
 import dbClient from '../utils/db';
@@ -13,6 +14,15 @@ const postNew = async (req, res) => {
   try {
     const hashPassword = hash(password);
     const result = await dbClient.insertOne('users', { email, password: hashPassword });
+    const userQueue = new Queue('userQueue');
+    userQueue.on('global:completed', (jobId, result) => { /* eslint-disable-line no-unused-vars */
+      console.log(`Job ${jobId} completed!`);
+      userQueue.getJob(jobId).then((job) => {
+        console.log(`Welcome email has been sent to user ${job.data.userId}`);
+        job.remove();
+      });
+    });
+    userQueue.add({ userId: result.insertedId });
     return res.status(201).json({ id: result.insertedId, email });
   } catch (error) {
     if (error.code === 11000) return res.status(400).json({ error: 'Already exist' });
